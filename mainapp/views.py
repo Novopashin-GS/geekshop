@@ -5,16 +5,6 @@ import json
 
 def index(request):
     context = {
-       'user': [
-           {
-                'first_name': 'Georgy',
-                'last_name': 'Novopashin'
-            },
-           {
-               'first_name': 'kek',
-               'last_name': 'lol'
-           }
-        ],
         'title': 'Мой магазин'
     }
     return render(request, 'mainapp/index.html', context)
@@ -72,6 +62,7 @@ def products_classic(request):
 def contact(request):
     with open(f'{settings.BASE_DIR}/contacts.json', encoding='utf-8') as contacts_file:
         context = {
-            'contacts': json.load(contacts_file)
+            'contacts': json.load(contacts_file),
+            'title': 'Контакты'
         }
     return render(request, 'mainapp/contact.html', context)
