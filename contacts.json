@@ -1,0 +1,20 @@
+[
+  {
+    "city": "Москва",
+    "phone": "172485125",
+    "email": "moscow@gb.local",
+    "address": "Улица питонистов"
+  },
+  {
+    "city": "Санкт-Петербург",
+    "phone": "12097512094",
+    "email": "spb@gb.local",
+    "address": "Улица айтишников"
+  },
+  {
+    "city": "Тюмень",
+    "phone": "1276412",
+    "email": "tum@gb.local",
+    "address": "Улица юмористов"
+  }
+]

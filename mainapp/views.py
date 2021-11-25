@@ -1,13 +1,77 @@
 from django.shortcuts import render
+from django.conf import settings
+import json
 
 
 def index(request):
-    return render(request, 'mainapp/index.html')
+    context = {
+       'user': [
+           {
+                'first_name': 'Georgy',
+                'last_name': 'Novopashin'
+            },
+           {
+               'first_name': 'kek',
+               'last_name': 'lol'
+           }
+        ],
+        'title': 'Мой магазин'
+    }
+    return render(request, 'mainapp/index.html', context)
+
+
+links_menu = [
+    {"href": 'products', 'name': 'Все'},
+    {"href": 'products_home', 'name': 'Дом'},
+    {"href": 'products_modern', 'name': 'Модерн'},
+    {"href": 'products_office', 'name': 'Оффис'},
+    {"href": 'products_classic', 'name': 'Классика'},
+]
 
 
 def products(request):
-    return render(request, 'mainapp/products.html')
+    context = {
+        'links_menu': links_menu,
+        'title': 'Товары'
+    }
+    return render(request, 'mainapp/products.html', context)
+
+
+def products_home(request):
+    context = {
+        'links_menu': links_menu,
+        'title': 'Товары'
+    }
+    return render(request, 'mainapp/products.html', context)
+
+
+def products_office(request):
+    context = {
+        'links_menu': links_menu,
+        'title': 'Товары'
+    }
+    return render(request, 'mainapp/products.html', context)
+
+
+def products_modern(request):
+    context = {
+        'links_menu': links_menu,
+        'title': 'Товары'
+    }
+    return render(request, 'mainapp/products.html', context)
+
+
+def products_classic(request):
+    context = {
+        'links_menu': links_menu,
+        'title': 'Товары'
+    }
+    return render(request, 'mainapp/products.html', context)
 
 
 def contact(request):
-    return render(request, 'mainapp/contact.html')
+    with open(f'{settings.BASE_DIR}/contacts.json', encoding='utf-8') as contacts_file:
+        context = {
+            'contacts': json.load(contacts_file)
+        }
+    return render(request, 'mainapp/contact.html', context)
