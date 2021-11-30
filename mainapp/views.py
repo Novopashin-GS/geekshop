@@ -1,57 +1,20 @@
 from django.shortcuts import render
 from django.conf import settings
 import json
+from mainapp.models import Product, ProductCategory
 
 
 def index(request):
+    products_list = Product.objects.all()[:4]
     context = {
-        'title': 'Мой магазин'
+        'title': 'Мой магазин',
+        'products': products_list
     }
     return render(request, 'mainapp/index.html', context)
 
 
-links_menu = [
-    {"href": 'products', 'name': 'Все'},
-    {"href": 'products_home', 'name': 'Дом'},
-    {"href": 'products_modern', 'name': 'Модерн'},
-    {"href": 'products_office', 'name': 'Оффис'},
-    {"href": 'products_classic', 'name': 'Классика'},
-]
-
-
-def products(request):
-    context = {
-        'links_menu': links_menu,
-        'title': 'Товары'
-    }
-    return render(request, 'mainapp/products.html', context)
-
-
-def products_home(request):
-    context = {
-        'links_menu': links_menu,
-        'title': 'Товары'
-    }
-    return render(request, 'mainapp/products.html', context)
-
-
-def products_office(request):
-    context = {
-        'links_menu': links_menu,
-        'title': 'Товары'
-    }
-    return render(request, 'mainapp/products.html', context)
-
-
-def products_modern(request):
-    context = {
-        'links_menu': links_menu,
-        'title': 'Товары'
-    }
-    return render(request, 'mainapp/products.html', context)
-
-
-def products_classic(request):
+def products(request, pk=None):
+    links_menu = ProductCategory.objects.all()
     context = {
         'links_menu': links_menu,
         'title': 'Товары'
