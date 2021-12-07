@@ -1,5 +1,5 @@
 {% load static %}
-<a href="{% static 'index.html' %}" class="logo"></a>
+<a href="{% static 'index' %}" class="logo"></a>
 <ul class="menu">
   <li><a href="{% url 'index' %}" class="{% if request.resolver_match.url_name == 'index' %}active{% endif %}">домой</a></li>
   <li><a href="{% url 'products:products' %}" class="{% if request.resolver_match.namespace == 'products' %}active{% endif %}">продукты</a></li>
