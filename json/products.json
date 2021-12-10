@@ -1,0 +1,38 @@
+[
+  {
+    "category": "дом",
+    "name": "люкс",
+    "image": "products_images/product-2.jpg",
+    "short_desc": "использованы премиальные материалы",
+    "description": "для тех, кто стремится к лучшему",
+    "price":  8157.99,
+    "quantity": 7
+  },
+   {
+    "category": "офис",
+    "name": "стул",
+    "image": "products_images/product-3.jpg",
+    "short_desc": "обычный стул",
+    "description": "стандартный, удобный стул",
+    "price":  157.99,
+    "quantity": 20
+  },
+   {
+    "category": "модерн",
+    "name": "диван",
+    "image": "products_images/product-31.jpg",
+    "short_desc": "кожаный материал",
+    "description": "черный, мягкий диван",
+    "price":  3157.99,
+    "quantity": 14
+  },
+   {
+    "category": "классика",
+    "name": "стол",
+    "image": "products_images/product-51.jpg",
+    "short_desc": "деревянный",
+    "description": "малогабаритный, сделанный из березы стол",
+    "price":  1157.99,
+    "quantity": 30
+  }
+  ]

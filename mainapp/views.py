@@ -23,7 +23,7 @@ def products(request, pk=None):
 
 
 def contact(request):
-    with open(f'{settings.BASE_DIR}/contacts.json', encoding='utf-8') as contacts_file:
+    with open(f'{settings.BASE_DIR}/json/contacts.json', encoding='utf-8') as contacts_file:
         context = {
             'contacts': json.load(contacts_file),
             'title': 'Контакты'
