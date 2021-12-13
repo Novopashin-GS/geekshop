@@ -1,11 +1,11 @@
 {% load static %}
-<a href="{% static 'index' %}" class="logo"></a>
+<a href="{% url 'index' %}" class="logo"></a>
 <ul class="menu">
   <li><a href="{% url 'index' %}" class="{% if request.resolver_match.url_name == 'index' %}active{% endif %}">домой</a></li>
   <li><a href="{% url 'products:products' %}" class="{% if request.resolver_match.namespace == 'products' %}active{% endif %}">продукты</a></li>
   <li><a href="{% url 'contact' %}" class="{% if request.resolver_match.url_name == 'contact' %}active{% endif %}">контакты</a></li>
     {%  if user.is_authenticated %}
-        <li><a href="{% url 'authapp:edit' %}" >{%  if user.first_name %} {{ user.first_name }} {% else %}Пользователь {%  endif %}</a></li>
+        <li><a href="{% url 'authapp:edit' %}" >{%  if user.first_name %} {{ user.first_name }} {% else %}Пользователь{%  endif %}</a></li>
         <li><a href="{% url 'authapp:logout' %}" >выйти</a></li>
     {%  else %}
         <li><a href="{% url 'authapp:register' %}" >регистрация</a></li>
@@ -13,4 +13,8 @@
     {% endif %}
 </ul>
 <a href="#" class="search"></a>
-<a href="#" class="basket"></a>
+<a href="#" class="basket">
+<span>
+    {% if basket %} {{ basket|length}} {% else  %} 0 {% endif %}
+</span>
+</a>
