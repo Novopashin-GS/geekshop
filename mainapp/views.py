@@ -7,11 +7,17 @@ from basketapp.models import Basket
 from mainapp.models import Product, ProductCategory
 
 
-def user_basket(request):
-    basket = []
-    if request.user.is_authenticated:
-        basket = Basket.objects.filter(user=request.user)
-    return basket
+def user_basket(user):
+    if user.is_authenticated:
+        return Basket.objects.filter(user=user)
+
+
+def get_random_hot():
+    return random.choice(list(Product.objects.all()))
+
+
+def get_same_products(hot_product):
+    return Product.objects.filter(category=hot_product.category).exclude(pk=hot_product.pk)[:3]
 
 
 def index(request):
@@ -19,7 +25,7 @@ def index(request):
     context = {
         'title': 'Мой магазин',
         'products': products_list,
-        'basket': user_basket(request)
+        'basket': user_basket(request.user)
     }
     return render(request, 'mainapp/index.html', context)
 
@@ -34,22 +40,21 @@ def products(request, pk=None):
         else:
             category = get_object_or_404(ProductCategory, pk=pk)
             product_list = Product.objects.filter(category__pk=pk)
-
         context = {
             'product_list': product_list,
             'category': category,
             'title': title,
             'links_menu': links_menu,
-            'basket': user_basket(request)
+            'basket': user_basket(request.user)
             }
         return render(request, 'mainapp/products_list.html', context)
-
+    hot_product = get_random_hot()
     context = {
         'links_menu': links_menu,
         'title': title,
-        'basket': user_basket(request),
-        'hot_product': random.choice(Product.objects.all()),
-        'some_products': Product.objects.all()[0:3]
+        'basket': user_basket(request.user),
+        'hot_product': hot_product,
+        'same_products': get_same_products(hot_product)
     }
     return render(request, 'mainapp/products.html', context)
 
@@ -59,6 +64,16 @@ def contact(request):
         context = {
             'contacts': json.load(contacts_file),
             'title': 'Контакты',
-            'basket': user_basket(request)
+            'basket': user_basket(request.user)
         }
     return render(request, 'mainapp/contact.html', context)
+
+
+def product(request, pk):
+    links_menu = ProductCategory.objects.all()
+    context = {
+        'basket': user_basket(request.user),
+        'links_menu': links_menu,
+        'product': get_object_or_404(Product, pk=pk)
+    }
+    return render(request, 'mainapp/product.html', context)

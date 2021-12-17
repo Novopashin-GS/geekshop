@@ -7,15 +7,19 @@ from django.urls import reverse
 
 def login(request):
     login_form = ShopUserAuthenticationForm(data=request.POST)
+    _next = request.GET.get('next', '')
     if request.method == 'POST' and login_form.is_valid():
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = auth.authenticate(username=username, password=password)
         if user and user.is_active:
             auth.login(request, user)
+            if 'next' in request.POST:
+                return HttpResponseRedirect(request.POST['next'])
             return HttpResponseRedirect(reverse('index'))
     context = {
-        'login_form': login_form
+        'login_form': login_form,
+        'next': _next
     }
     return render(request, 'authapp/login.html', context=context)
 
@@ -35,6 +39,7 @@ def edit(request):
     else:
         change_form = ShopUserChangeForm(instance=request.user)
     context = {
+        'title': 'Редактирование',
         'change_form': change_form
     }
     return render(request, 'authapp/change.html', context)
@@ -50,6 +55,7 @@ def register(request):
     else:
         register_form = ShopUserRegisterForm()
     context = {
+        'title': 'Регистрация',
         'register_form': register_form
     }
     return render(request, 'authapp/register.html', context)

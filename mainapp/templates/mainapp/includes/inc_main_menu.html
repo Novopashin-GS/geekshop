@@ -13,8 +13,13 @@
     {% endif %}
 </ul>
 <a href="#" class="search"></a>
-<a href="#" class="basket">
+<a href="{% url 'basketapp:basket' %}" class="basket">
 <span>
-    {% if basket %} {{ basket|length}} {% else  %} 0 {% endif %}
+    {% if basket %}
+        {{ basket.0.total_cost|floatformat:0 }} рублей
+        <br>
+        ({{ basket.0.total_quantity}} шт)
+    {% else  %} 0
+    {% endif %}
 </span>
 </a>
