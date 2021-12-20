@@ -1,0 +1,10 @@
+{% extends 'adminapp/base.html' %}
+
+{% block content %}
+    <p>Уверены, что хотите удалить категорию {{ object.name }}?</p>
+    <form class="form-horizontal" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Уверен">
+    </form>
+    <a href="{% url 'adminapp:categories' %}" class="btn btn-primary">Нет, я передумал</a>
+{% endblock %}
