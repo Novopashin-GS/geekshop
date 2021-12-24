@@ -6,9 +6,5 @@
     {{ form.as_p }}
     <input type="submit" class="btn btn-primary" value="Сохранить">
     </form>
-    {% if category_pk %}
-    <a href="{% url 'adminapp:products' category_pk  %}">К списку товаров</a>
-    {% else %}
-    <a href="{% url 'adminapp:categories'%}">К списку категорий</a>
-    {% endif %}
+    <a href="{% url 'adminapp:products' category.pk  %}">К списку товаров</a>
 {% endblock %}

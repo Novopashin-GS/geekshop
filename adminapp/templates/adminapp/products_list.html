@@ -1,10 +1,12 @@
 {% extends 'adminapp/base.html' %}
+{% load my_tags %}
 {% block content %}
     <div class="products_list">
-        {% for item in objects_list %}
+        <a href="{% url 'adminapp:product_create' category.pk %}" class="btn-primary btn">Добавить продукт</a>
+        {% for item in object_list %}
             <div class="product_record" {% if not item.is_active %}style="opacity: 0.5"{% endif %}>
                 <div class="product_name"> {{ item.name }}</div>
-                <img src="/media/{{ item.image }}"/>
+                <img src="{{ item.image|media_for_products }}"/>
                 <div class="product_actions">
                     <a class="btn btn-info" style="margin-bottom: 5px"
                        href="{% url 'adminapp:product_update' item.pk %}">Изменить</a>

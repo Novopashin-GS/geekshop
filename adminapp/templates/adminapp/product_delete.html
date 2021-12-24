@@ -6,5 +6,5 @@
     {% csrf_token %}
     <input type="submit" value="Уверен">
     </form>
-    <a href="{% url 'adminapp:products' category_pk %}" class="btn btn-primary">Нет, я передумал</a>
+    <a href="{% url 'adminapp:products' category.pk %}" class="btn btn-primary">Нет, я передумал</a>
 {% endblock %}
