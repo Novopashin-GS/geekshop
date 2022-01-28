@@ -13,7 +13,8 @@
         <input class="form-control" type="submit" value="войти">
         <a class='btn btn-primary form-control' href="{% url 'authapp:register' %}">Регистрация</a>
         <br>
-        <a class='btn btn-primary form-control' href="{% url 'index' %}">На главную</a>
     </form>
+    <a class='btn btn-primary form-control' href="{% url 'index' %}">На главную</a>
+    <a class='btn btn-primary form-control' href="{% url 'social:begin' 'vk-oauth2' %}?next=/">VK</a>
 
 {% endblock %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib import auth
-from authapp.forms import ShopUserAuthenticationForm, ShopUserRegisterForm, ShopUserChangeForm
+from authapp.forms import ShopUserAuthenticationForm, ShopUserRegisterForm, ShopUserChangeForm, ShopUserProfileForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.conf import settings
@@ -36,15 +36,18 @@ def logout(request):
 def edit(request):
     if request.method == 'POST':
         change_form = ShopUserChangeForm(request.POST, request.FILES, instance=request.user)
-        if change_form.is_valid():
+        change_profile_form = ShopUserProfileForm(request.POST, instance=request.user.shopuserprofile)
+        if change_form.is_valid() and change_profile_form.is_valid():
             change_form.save()
             return HttpResponseRedirect(reverse('authapp:edit'))
 
     else:
         change_form = ShopUserChangeForm(instance=request.user)
+        change_profile_form = ShopUserProfileForm(instance=request.user.shopuserprofile)
     context = {
         'title': 'Редактирование',
-        'change_form': change_form
+        'change_form': change_form,
+        'change_profile_form': change_profile_form
     }
     return render(request, 'authapp/change.html', context)
 

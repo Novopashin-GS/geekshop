@@ -1,19 +1,17 @@
 from authapp.forms import ShopUserChangeForm
-from authapp.models import ShopUser
+from authapp.models import ShopUser, ShopUserProfile
 from django import forms
 
 from mainapp.models import ProductCategory, Product
 
 
 class ShopAdminUserChangeForm(ShopUserChangeForm):
-
     class Meta:
         model = ShopUser
         fields = '__all__'
 
 
 class ProductCategoryForm(forms.ModelForm):
-
     class Meta:
         model = ProductCategory
         fields = '__all__'
@@ -25,7 +23,6 @@ class ProductCategoryForm(forms.ModelForm):
 
 
 class ProductForm(forms.ModelForm):
-
     class Meta:
         model = Product
         fields = '__all__'

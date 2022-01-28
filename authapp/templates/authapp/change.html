@@ -4,6 +4,7 @@
     <form class="form-horizontal" action="{% url 'authapp:edit' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ change_form.as_p }}
+        {{ change_profile_form.as_p }}
         <br>
         <input class="form-control" type="submit" value="Сохранить">
     </form>

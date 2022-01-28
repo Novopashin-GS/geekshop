@@ -114,11 +114,6 @@ class ProductCreateView(CreateView):
     template_name = 'adminapp/product_form.html'
     form_class = ProductForm
 
-    # def get_form_class(self):
-    #     category = get_object_or_404(ProductCategory, pk=self.kwargs.get('pk'))
-    #     form_class = ProductForm(initial={'category': category})
-    #     return form_class
-
     def get_success_url(self):
         product = get_object_or_404(Product, pk=self.kwargs.get('pk'))
         category_item = product.category
