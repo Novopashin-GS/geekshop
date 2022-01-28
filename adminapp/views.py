@@ -124,6 +124,7 @@ class ProductCreateView(CreateView):
         product = get_object_or_404(Product, pk=self.kwargs.get('pk'))
         category_item = product.category
         context_data['category'] = category_item
+        context_data['form'].initial['category'] = context_data['category']
         return context_data
 
     @method_decorator(user_passes_test(lambda u: u.is_superuser))
