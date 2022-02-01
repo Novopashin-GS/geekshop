@@ -3,11 +3,14 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.db import transaction
 from django.views.generic import ListView, UpdateView, CreateView, DetailView, DeleteView
-
+from django.dispatch import receiver
 from basketapp.models import Basket
+from mainapp.models import Product
 from ordersapp.forms import OrderItemForm
 from ordersapp.models import Order, OrderItem
 from django.urls import reverse_lazy
+from django.db.models.signals import pre_save, pre_delete
+from django.http import JsonResponse
 
 
 class OrderListView(ListView):
@@ -36,6 +39,7 @@ class OrderCreateView(CreateView):
                 for num, form in enumerate(formset.forms):
                     form.initial['product'] = basket_items[num].product
                     form.initial['quantity'] = basket_items[num].quantity
+                    form.initial['price'] = basket_items[num].product.price
             else:
                 formset = OrderFormSet()
         context['orderitems'] = formset
@@ -68,6 +72,9 @@ class OrderUpdateView(UpdateView):
             formset = OrderFormSet(self.request.POST, instance=self.object)
         else:
             formset = OrderFormSet(instance=self.object)
+            for form in formset:
+                if form.instance.pk:
+                    form.initial['price'] = form.instance.product.price
         context['orderitems'] = formset
         return context
 
@@ -98,3 +105,28 @@ def complete(request, pk):
     order_item.status = Order.SENT_TO_PROCEED
     order_item.save()
     return HttpResponseRedirect(reverse('ordersapp:list'))
+
+
+@receiver(pre_save, sender=OrderItem)
+@receiver(pre_save, sender=Basket)
+def product_quantity_update_pre_save(sender, instance, *args, **kwargs):
+    if instance.pk:
+        instance.product.quantity -= instance.quantity - sender.get_item(instance.pk).quantity
+    else:
+        instance.product.quantity -= instance.quantity
+    instance.product.save()
+
+
+@receiver(pre_delete, sender=OrderItem)
+@receiver(pre_delete, sender=Basket)
+def product_quantity_update_pre_delete(sender, instance, *args, **kwargs):
+    instance.product.quantity += instance.quantity
+    instance.product.save()
+
+
+def get_product_price(request, pk):
+    product_price = 0
+    product = Product.objects.filter(pk=pk, is_active=True).first()
+    if product:
+        product_price = product.price
+    return JsonResponse({'price': product_price})
