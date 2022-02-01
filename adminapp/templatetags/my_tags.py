@@ -9,14 +9,14 @@ def media_for_users(avatar):
     if not avatar:
         avatar = 'users/card-2.png'
 
-    return f'{settings.MEDIA_URL}{avatar}'
+    return f'{avatar}'
 
 
 def media_for_products(image):
     if not image:
         image = 'products_images/default.jpg'
 
-    return f'{settings.MEDIA_URL}{image}'
+    return f'{image}'
 
 
 register.filter('media_for_products', media_for_products)
