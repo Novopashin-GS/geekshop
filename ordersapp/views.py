@@ -28,7 +28,7 @@ class OrderCreateView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=1)
-        basket_items = Basket.objects.filter(user=self.request.user)
+        basket_items = Basket.objects.filter(user=self.request.user).select_related()
         if self.request.method == 'POST':
             formset = OrderFormSet(self.request.POST)
             basket_items.delete()

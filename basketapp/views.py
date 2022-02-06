@@ -29,10 +29,7 @@ def basket_add(request, pk):
 
 @login_required
 def basket(request):
-    context = {
-        'basket_list': Basket.objects.filter(user=request.user)
-    }
-    return render(request, 'basketapp/basket.html', context)
+    return render(request, 'basketapp/basket.html')
 
 
 def basket_edit(request, pk, quantity):
