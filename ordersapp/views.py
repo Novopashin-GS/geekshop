@@ -55,7 +55,7 @@ class OrderCreateView(CreateView):
                 orderitems.instance = self.object
                 orderitems.save()
 
-        if self.object.get_total_cost() == 0:
+        if self.object.get_summary()['total_cost'] == 0:
             self.object.delete()
         return super().form_valid(form)
 
@@ -71,7 +71,8 @@ class OrderUpdateView(UpdateView):
         if self.request.method == 'POST':
             formset = OrderFormSet(self.request.POST, instance=self.object)
         else:
-            formset = OrderFormSet(instance=self.object)
+            queryset = self.object.orderitems.select_related()
+            formset = OrderFormSet(instance=self.object, queryset=queryset)
             for form in formset:
                 if form.instance.pk:
                     form.initial['price'] = form.instance.product.price
@@ -86,7 +87,7 @@ class OrderUpdateView(UpdateView):
             if orderitems.is_valid():
                 orderitems.instance = self.object
                 orderitems.save()
-        if self.object.get_total_cost() == 0:
+        if self.object.get_summary()['total_cost'] == 0:
             self.object.delete()
         return super().form_valid(form)
 
@@ -111,7 +112,7 @@ def complete(request, pk):
 @receiver(pre_save, sender=Basket)
 def product_quantity_update_pre_save(sender, instance, *args, **kwargs):
     if instance.pk:
-        instance.product.quantity -= instance.quantity - sender.get_item(instance.pk).quantity
+        instance.product.quantity -= instance.quantity - sender.objects.get(pk=instance.pk).quantity
     else:
         instance.product.quantity -= instance.quantity
     instance.product.save()

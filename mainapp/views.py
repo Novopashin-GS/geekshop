@@ -3,9 +3,33 @@ from django.shortcuts import render, get_object_or_404
 from django.conf import settings
 import json
 import random
-
-from basketapp.models import Basket
+from django.core.cache import cache
 from mainapp.models import Product, ProductCategory
+from django.views.decorators.cache import cache_page
+
+
+def get_links_menu():
+    if settings.LOW_CACHE:
+        key = 'links_menu'
+        links_menu = cache.get(key)
+        if links_menu is None:
+            links_menu = ProductCategory.objects.filter(is_active=True)
+            cache.set(key, links_menu)
+        return links_menu
+    else:
+        return ProductCategory.objects.filter(is_active=True)
+
+
+def get_products_in_category(pk):
+    if settings.LOW_CACHE:
+        key = f'products_in_category_pk_{pk}'
+        product_list = cache.get(key)
+        if product_list is None:
+            product_list = Product.objects.filter(is_active=True, category__pk=pk).select_related()
+            cache.set(key, product_list)
+        return product_list
+    else:
+        return Product.objects.filter(is_active=True, category__pk=pk).select_related()
 
 
 def get_random_hot():
@@ -25,8 +49,9 @@ def index(request):
     return render(request, 'mainapp/index.html', context)
 
 
+#@cache_page(3600)
 def products(request, pk=None, page=1):
-    links_menu = ProductCategory.objects.filter(is_active=True)
+    links_menu = get_links_menu()
     title = 'Товары'
     if pk is not None:
         if pk == 0:
@@ -34,8 +59,7 @@ def products(request, pk=None, page=1):
             category = {'name': 'все продукты', 'pk': 0}
         else:
             category = get_object_or_404(ProductCategory, pk=pk)
-            product_list = Product.objects.filter(is_active=True, category__pk=pk)
-
+            product_list = get_products_in_category(pk)
         paginator = Paginator(product_list, 2)
         try:
             products_paginator = paginator.page(page)
@@ -60,6 +84,7 @@ def products(request, pk=None, page=1):
     return render(request, 'mainapp/products.html', context)
 
 
+#@cache_page(3600)
 def contact(request):
     with open(f'{settings.BASE_DIR}/json/contacts.json', encoding='utf-8') as contacts_file:
         context = {
@@ -70,7 +95,7 @@ def contact(request):
 
 
 def product(request, pk):
-    links_menu = ProductCategory.objects.filter(is_active=True)
+    links_menu = get_links_menu()
     context = {
         'links_menu': links_menu,
         'product': get_object_or_404(Product, pk=pk)

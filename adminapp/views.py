@@ -115,15 +115,13 @@ class ProductCreateView(CreateView):
     form_class = ProductForm
 
     def get_success_url(self):
-        product = get_object_or_404(Product, pk=self.kwargs.get('pk'))
-        category_item = product.category
-        return reverse('adminapp:products', args=[category_item.pk])
+        category = get_object_or_404(ProductCategory, pk=self.kwargs.get('pk'))
+        return reverse('adminapp:products', args=[category.pk])
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        product = get_object_or_404(Product, pk=self.kwargs.get('pk'))
-        category_item = product.category
-        context_data['category'] = category_item
+        category = get_object_or_404(ProductCategory, pk=self.kwargs.get('pk'))
+        context_data['category'] = category
         context_data['form'].initial['category'] = context_data['category']
         return context_data
 
