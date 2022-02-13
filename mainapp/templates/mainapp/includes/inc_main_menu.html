@@ -24,9 +24,9 @@
 <a href="{% url 'basketapp:basket' %}" class="basket">
 <span>
     {% if basket_list %}
-        {{ basket_list.0.total_cost|floatformat:0 }} рублей
+        {{ basket_total_cost}} рублей
         <br>
-        ({{ basket_list.0.total_quantity }} шт)
+        ({{ basket_total_quantity }} шт)
     {% else %} 0
     {% endif %}
 </span>
