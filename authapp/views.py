@@ -18,6 +18,7 @@ def login(request):
         user = auth.authenticate(username=username, password=password)
         if user and user.is_active:
             auth.login(request, user)
+            auth.login(request, user)
             if 'next' in request.POST:
                 return HttpResponseRedirect(request.POST['next'])
             return HttpResponseRedirect(reverse('index'))
@@ -77,7 +78,7 @@ def verify(request, email, activation_key):
             user.activation_key = None
             user.activation_key_expired = None
             user.save()
-            auth.login(request, user)
+            auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         return render(request, 'authapp/verify.html')
 
 

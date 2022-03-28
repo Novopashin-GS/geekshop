@@ -12,6 +12,8 @@ class ShopAdminUserChangeForm(ShopUserChangeForm):
 
 
 class ProductCategoryForm(forms.ModelForm):
+    discount = forms.IntegerField(label='Скидка', min_value=0, max_value=90, required=False, initial=0)
+
     class Meta:
         model = ProductCategory
         fields = '__all__'
